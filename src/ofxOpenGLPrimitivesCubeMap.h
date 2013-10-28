@@ -16,28 +16,24 @@ public:
 				   TextureInternalFormat::Enum internalformat = TextureInternalFormat::RGB8,
 				   TextureType::Enum type = TextureType::UNSIGNED_BYTE)
 	:Texture2D(internal::custom_constructor(),
-			 width, height,
-			 format,
-			 internalformat,
-			 type,
-			 cubemap_target,
-			 TextureParameterTarget::TEXTURE_CUBE_MAP)
+			   width, height,
+			   format,
+			   internalformat,
+			   type,
+			   cubemap_target,
+			   TextureParameterTarget::TEXTURE_CUBE_MAP)
 	{
 		this->object = object;
 		
-		bind();
-		{
-			glTexImage2D(target,
-						 0, /* mip level */
-						 internalformat,
-						 width,
-						 height,
-						 0, /* border */
-						 format,
-						 type,
-						 0 /* data */);
-		}
-		unbind();
+		glTexImage2D(target,
+					 0, /* mip level */
+					 internalformat,
+					 width,
+					 height,
+					 0, /* border */
+					 format,
+					 type,
+					 0 /* data */);
 		
 		checkError();
 	}
@@ -57,7 +53,7 @@ public:
 			 format,
 			 internalformat,
 			 type,
-			 TextureTarget::TEXTURE_2D,
+			 TextureTarget::TEXTURE_CUBE_MAP_POSITIVE_X,
 			 TextureParameterTarget::TEXTURE_CUBE_MAP)
 	{
 		glGenTextures(1, &object);
@@ -65,10 +61,10 @@ public:
 		
 		bind();
 		{
-			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(parameter_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(parameter_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(parameter_target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(parameter_target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			
 			checkError();
 			
@@ -133,6 +129,7 @@ public:
 		ofPushStyle();
 		
 		Texture::enable();
+		Texture::bind();
 		
 		ofSetColor(255);
 		
@@ -238,6 +235,7 @@ public:
 
 		glEnd();
 
+		Texture::unbind();
 		Texture::disable();
 		
 		ofPopStyle();

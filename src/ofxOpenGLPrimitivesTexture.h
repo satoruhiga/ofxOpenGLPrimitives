@@ -16,7 +16,7 @@ public:
 			TextureType::Enum type,
 			TextureTarget::Enum target,
 			TextureParameterTarget::Enum parameter_target)
-	: format(format),
+	:format(format),
 	internalformat(internalformat),
 	type(type),
 	target(target),
@@ -33,22 +33,26 @@ public:
 	
 	void bind()
 	{
-		glBindTexture(target, object);
+		glBindTexture(parameter_target, object);
+		checkError();
 	}
 	
 	void unbind()
 	{
-		glBindTexture(target, 0);
+		glBindTexture(parameter_target, 0);
+		checkError();
 	}
 	
 	void enable()
 	{
-		glEnable(target);
+		glEnable(parameter_target);
+		checkError();
 	}
 	
 	void disable()
 	{
-		glDisable(target);
+		glDisable(parameter_target);
+		checkError();
 	}
 
 	//
