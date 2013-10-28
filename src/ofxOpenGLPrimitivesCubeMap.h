@@ -4,18 +4,18 @@
 
 OFX_OPENGL_PRIMITIVES_BEGIN_NAMESPACE
 
-class CubeMapTexture : public Texture
+class CubeMapTexture : public Texture2D
 {
 public:
 	OFX_OPENGL_PRIMITIVES_DEFINE_REFERENCE(CubeMapTexture);
 	
 	CubeMapTexture(GLuint object,
 				   GLsizei width, GLsizei height,
-				   TextureTarget2D::Enum cubemap_target,
+				   TextureTarget::Enum cubemap_target,
 				   TextureFormat::Enum format = TextureFormat::RGB,
 				   TextureInternalFormat::Enum internalformat = TextureInternalFormat::RGB8,
 				   TextureType::Enum type = TextureType::UNSIGNED_BYTE)
-	:Texture(internal::custom_constructor(),
+	:Texture2D(internal::custom_constructor(),
 			 width, height,
 			 format,
 			 internalformat,
@@ -43,7 +43,7 @@ public:
 	}
 };
 
-class CubeMap : public Texture
+class CubeMap : public Texture2D
 {
 public:
 	OFX_OPENGL_PRIMITIVES_DEFINE_REFERENCE(CubeMap);
@@ -52,12 +52,12 @@ public:
 			TextureFormat::Enum format = TextureFormat::RGB,
 			TextureInternalFormat::Enum internalformat = TextureInternalFormat::RGB8,
 			TextureType::Enum type = TextureType::UNSIGNED_BYTE)
-	:Texture(internal::custom_constructor(),
+	:Texture2D(internal::custom_constructor(),
 			 width, height,
 			 format,
 			 internalformat,
 			 type,
-			 TextureTarget2D::TEXTURE_2D,
+			 TextureTarget::TEXTURE_2D,
 			 TextureParameterTarget::TEXTURE_CUBE_MAP)
 	{
 		glGenTextures(1, &object);
@@ -76,7 +76,7 @@ public:
 			{
 				textures[i] = new CubeMapTexture(object,
 												 width, height,
-												 (TextureTarget2D::Enum)(TextureTarget2D::TEXTURE_CUBE_MAP_POSITIVE_X + i),
+												 (TextureTarget::Enum)(TextureTarget::TEXTURE_CUBE_MAP_POSITIVE_X + i),
 												 format,
 												 internalformat,
 												 type);

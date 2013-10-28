@@ -20,14 +20,14 @@ public:
 	virtual string getFragment(int render_target_index) { return ""; }
 	
 	string getName() const { return name; }
-	Texture::Ref& getTexture() { return texture; }
+	Texture2D::Ref& getTexture() { return texture; }
 	
 protected:
 	
 	string name;
 	int width, height;
 	
-	Texture::Ref texture;
+	Texture2D::Ref texture;
 };
 
 #pragma mark - ColorBuffer
@@ -38,11 +38,11 @@ public:
 	
 	ColorBuffer(int width, int height) : GBuffer("color", width, height)
 	{
-		texture = new Texture(width, height,
+		texture = new Texture2D(width, height,
 							  TextureFormat::RGB,
 							  TextureInternalFormat::RGB8,
 							  TextureType::UNSIGNED_BYTE,
-							  TextureTarget2D::TEXTURE_RECTANGLE,
+							  TextureTarget::TEXTURE_RECTANGLE,
 							  TextureParameterTarget::TEXTURE_RECTANGLE);
 	}
 	
@@ -68,11 +68,11 @@ public:
 	
 	PositionBuffer(int width, int height) : GBuffer("position", width, height)
 	{
-		texture = new Texture(width, height,
+		texture = new Texture2D(width, height,
 							  TextureFormat::RGB,
 							  TextureInternalFormat::RGB16F,
 							  TextureType::FLOAT,
-							  TextureTarget2D::TEXTURE_RECTANGLE,
+							  TextureTarget::TEXTURE_RECTANGLE,
 							  TextureParameterTarget::TEXTURE_RECTANGLE);
 	}
 	
@@ -100,11 +100,11 @@ public:
 	
 	NormalBuffer(int width, int height) : GBuffer("normal", width, height)
 	{
-		texture = new Texture(width, height,
+		texture = new Texture2D(width, height,
 							  TextureFormat::RGB,
 							  TextureInternalFormat::RGB16F,
 							  TextureType::FLOAT,
-							  TextureTarget2D::TEXTURE_RECTANGLE,
+							  TextureTarget::TEXTURE_RECTANGLE,
 							  TextureParameterTarget::TEXTURE_RECTANGLE);
 	}
 	
@@ -207,7 +207,7 @@ public:
 		for (int i = 0; i < buffers.size(); i++)
 		{
 			GBuffer::Ref &o = buffers[i];
-			Texture::Ref &tex = o->getTexture();
+			Texture2D::Ref &tex = o->getTexture();
 			
 			tex->draw(xx, 0, 200, 200);
 			
@@ -217,7 +217,7 @@ public:
 		ofPopStyle();
 	}
 	
-	Texture::Ref& getTexture(int index) { return buffers[index]->getTexture(); }
+	Texture2D::Ref& getTexture(int index) { return buffers[index]->getTexture(); }
 	
 protected:
 	
