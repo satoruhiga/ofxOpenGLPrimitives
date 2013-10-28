@@ -37,7 +37,7 @@ public:
 	{
 		glFramebufferTexture2D(GL_FRAMEBUFFER,
 							   attachment,
-							   tex->getImageTarget(),
+							   tex->getTarget(),
 							   tex->getObject(),
 							   0);
 		

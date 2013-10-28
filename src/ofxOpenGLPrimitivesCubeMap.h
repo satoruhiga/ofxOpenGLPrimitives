@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxOpenGLPrimitivesUtil.h"
+#include "ofxOpenGLPrimitivesTexture.h"
 
 OFX_OPENGL_PRIMITIVES_BEGIN_NAMESPACE
 
@@ -9,14 +9,25 @@ class CubeMapTexture : public Texture
 public:
 	OFX_OPENGL_PRIMITIVES_DEFINE_REFERENCE(CubeMapTexture);
 	
-	CubeMapTexture(GLuint object, GLsizei width, GLsizei height, GLenum cubemap_target, GLint internalformat = GL_RGB8, GLenum format = GL_RGB, GLenum type = GL_UNSIGNED_BYTE)
-	:Texture(internal::custom_constructor(), width, height, internalformat, format, type, GL_TEXTURE_CUBE_MAP, cubemap_target)
+	CubeMapTexture(GLuint object,
+				   GLsizei width, GLsizei height,
+				   TextureTarget2D::Enum cubemap_target,
+				   TextureFormat::Enum format = TextureFormat::RGB,
+				   TextureInternalFormat::Enum internalformat = TextureInternalFormat::RGB8,
+				   TextureType::Enum type = TextureType::UNSIGNED_BYTE)
+	:Texture(internal::custom_constructor(),
+			 width, height,
+			 format,
+			 internalformat,
+			 type,
+			 cubemap_target,
+			 TextureParameterTarget::TEXTURE_CUBE_MAP)
 	{
 		this->object = object;
 		
 		bind();
 		{
-			glTexImage2D(image_target,
+			glTexImage2D(target,
 						 0, /* mip level */
 						 internalformat,
 						 width,
@@ -37,9 +48,17 @@ class CubeMap : public Texture
 public:
 	OFX_OPENGL_PRIMITIVES_DEFINE_REFERENCE(CubeMap);
 	
-	CubeMap(GLsizei width, GLsizei height, GLint internalformat = GL_RGB8, GLenum format = GL_RGB, GLenum type = GL_UNSIGNED_BYTE)
-	:Texture(internal::custom_constructor(), width, height, internalformat, format, type, GL_TEXTURE_CUBE_MAP)
-	
+	CubeMap(GLsizei width, GLsizei height,
+			TextureFormat::Enum format = TextureFormat::RGB,
+			TextureInternalFormat::Enum internalformat = TextureInternalFormat::RGB8,
+			TextureType::Enum type = TextureType::UNSIGNED_BYTE)
+	:Texture(internal::custom_constructor(),
+			 width, height,
+			 format,
+			 internalformat,
+			 type,
+			 TextureTarget2D::TEXTURE_2D,
+			 TextureParameterTarget::TEXTURE_CUBE_MAP)
 	{
 		glGenTextures(1, &object);
 		assert(object != 0);
@@ -55,7 +74,12 @@ public:
 			
 			for (int i = 0; i < 6; i++)
 			{
-				textures[i] = new CubeMapTexture(object, width, height, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, internalformat, format, type);
+				textures[i] = new CubeMapTexture(object,
+												 width, height,
+												 (TextureTarget2D::Enum)(TextureTarget2D::TEXTURE_CUBE_MAP_POSITIVE_X + i),
+												 format,
+												 internalformat,
+												 type);
 				checkError();
 			}
 			

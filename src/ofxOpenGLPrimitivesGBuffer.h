@@ -38,7 +38,12 @@ public:
 	
 	ColorBuffer(int width, int height) : GBuffer("color", width, height)
 	{
-		texture = new Texture(width, height, GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, GL_TEXTURE_RECTANGLE);
+		texture = new Texture(width, height,
+							  TextureFormat::RGB,
+							  TextureInternalFormat::RGB8,
+							  TextureType::UNSIGNED_BYTE,
+							  TextureTarget2D::TEXTURE_RECTANGLE,
+							  TextureParameterTarget::TEXTURE_RECTANGLE);
 	}
 	
 	string getVertexShader()
@@ -63,7 +68,12 @@ public:
 	
 	PositionBuffer(int width, int height) : GBuffer("position", width, height)
 	{
-		texture = new Texture(width, height, GL_RGB16F, GL_RGB, GL_FLOAT, GL_TEXTURE_RECTANGLE);
+		texture = new Texture(width, height,
+							  TextureFormat::RGB,
+							  TextureInternalFormat::RGB16F,
+							  TextureType::FLOAT,
+							  TextureTarget2D::TEXTURE_RECTANGLE,
+							  TextureParameterTarget::TEXTURE_RECTANGLE);
 	}
 	
 	string getVarying()
@@ -90,7 +100,12 @@ public:
 	
 	NormalBuffer(int width, int height) : GBuffer("normal", width, height)
 	{
-		texture = new Texture(width, height, GL_RGB16F, GL_RGB, GL_FLOAT, GL_TEXTURE_RECTANGLE);
+		texture = new Texture(width, height,
+							  TextureFormat::RGB,
+							  TextureInternalFormat::RGB16F,
+							  TextureType::FLOAT,
+							  TextureTarget2D::TEXTURE_RECTANGLE,
+							  TextureParameterTarget::TEXTURE_RECTANGLE);
 	}
 	
 	string getVarying()

@@ -11,27 +11,30 @@ class Texture : public OpenGLObject, public HasSize2D
 public:
 	OFX_OPENGL_PRIMITIVES_DEFINE_REFERENCE(Texture);
 	
-	Texture(GLsizei width, GLsizei height, GLint internalformat = GL_RGBA8, GLenum format = GL_RGBA, GLenum type = GL_UNSIGNED_BYTE, GLenum target = GL_TEXTURE_RECTANGLE, GLenum image_target = 0)
+	Texture(GLsizei width, GLsizei height,
+			TextureFormat::Enum format = TextureFormat::RGBA,
+			TextureInternalFormat::Enum internalformat = TextureInternalFormat::RGBA8,
+			TextureType::Enum type = TextureType::UNSIGNED_BYTE,
+			TextureTarget2D::Enum target = TextureTarget2D::TEXTURE_RECTANGLE,
+			TextureParameterTarget::Enum parameter_target = TextureParameterTarget::TEXTURE_RECTANGLE)
 	:HasSize2D(width, height),
 	target(target),
-	image_target(image_target),
+	parameter_target(parameter_target),
 	internalformat(internalformat),
 	format(format),
 	type(type)
 	{
-		if (image_target == 0) image_target = target;
-		
 		glGenTextures(1, &object);
 		assert(object != 0);
 		
 		bind();
 		{
-			glTexParameteri(target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glTexParameteri(target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(parameter_target, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexParameteri(parameter_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(parameter_target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(parameter_target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 			
-			glTexImage2D(image_target,
+			glTexImage2D(target,
 						 0, /* mip level */
 						 internalformat,
 						 width,
@@ -75,7 +78,7 @@ public:
 	
 	void update(const GLvoid *pixels)
 	{
-		glTexSubImage2D(image_target,
+		glTexSubImage2D(target,
 						0, /* GLint level */
 						0, /* GLint xoffset */
 						0, /* GLint yoffset */
@@ -89,11 +92,11 @@ public:
 	
 	//
 	
-	GLenum getTarget() const { return target; }
-	GLenum getImageTarget() const { return image_target; }
-	GLint getInternalFormat() const { return internalformat; }
-	GLenum getFormat() const { return format; }
-	GLenum getType() const { return type; }
+	TextureTarget2D::Enum getTarget() const { return target; }
+	TextureParameterTarget::Enum getParameterTarget() const { return parameter_target; }
+	TextureInternalFormat::Enum getInternalFormat() const { return internalformat; }
+	TextureFormat::Enum getFormat() const { return format; }
+	TextureType::Enum getType() const { return type; }
 	
 	//
 	
@@ -110,7 +113,7 @@ public:
 		ofPushMatrix();
 		ofTranslate(x, y);
 		
-		if (target == GL_TEXTURE_2D)
+		if (target == TextureTarget2D::TEXTURE_2D)
 		{
 			glBegin(GL_QUADS);
 			glTexCoord2f(0, 0);
@@ -126,7 +129,7 @@ public:
 			glVertex2f(0, h);
 			glEnd();
 		}
-		else if (target == GL_TEXTURE_RECTANGLE)
+		else if (target == TextureTarget2D::TEXTURE_RECTANGLE)
 		{
 			glBegin(GL_QUADS);
 			glTexCoord2f(0, 0);
@@ -151,20 +154,26 @@ public:
 	
 protected:
 	
-	GLenum target;
-	GLenum image_target;
-	GLint internalformat;
-	GLenum format;
-	GLenum type;
+	TextureTarget2D::Enum target;
+	TextureParameterTarget::Enum parameter_target;
+	TextureInternalFormat::Enum internalformat;
+	TextureFormat::Enum format;
+	TextureType::Enum type;
 	
 	struct internal {
 		struct custom_constructor {};
 	};
 	
-	Texture(internal::custom_constructor, GLsizei width, GLsizei height, GLint internalformat = GL_RGBA8, GLenum format = GL_RGBA, GLenum type = GL_UNSIGNED_BYTE, GLenum target = GL_TEXTURE_RECTANGLE, GLenum image_target = 0)
+	Texture(internal::custom_constructor,
+			GLsizei width, GLsizei height,
+			TextureFormat::Enum format = TextureFormat::RGBA,
+			TextureInternalFormat::Enum internalformat = TextureInternalFormat::RGBA8,
+			TextureType::Enum type = TextureType::UNSIGNED_BYTE,
+			TextureTarget2D::Enum target = TextureTarget2D::TEXTURE_RECTANGLE,
+			TextureParameterTarget::Enum parameter_target = TextureParameterTarget::TEXTURE_RECTANGLE)
 	:HasSize2D(width, height),
 	target(target),
-	image_target(image_target),
+	parameter_target(parameter_target),
 	internalformat(internalformat),
 	format(format),
 	type(type)
