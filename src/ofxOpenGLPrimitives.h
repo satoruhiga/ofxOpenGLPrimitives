@@ -15,4 +15,5 @@
 #include "ofxOpenGLPrimitives/Geometry.h"
 #include "ofxOpenGLPrimitives/Program.h"
 #include "ofxOpenGLPrimitives/ShaderLoader.h"
-#include "ofxOpenGLPrimitives/ProgramCapability.h"
+#include "ofxOpenGLPrimitives/RendererCapability.h"
+#include "ofxOpenGLPrimitives/Renderer.h"

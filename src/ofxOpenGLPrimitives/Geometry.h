@@ -32,14 +32,14 @@ public:
 	
 	void end() { VertexAttribute::end(); bind(); }
 	
-	void draw()
+	void draw() const
 	{
 		vao->bind();
-		glDrawElements(VertexAttribute::mode, indices.size(), GL_UNSIGNED_INT, NULL);
+		glDrawElements(mode, indices.size(), GL_UNSIGNED_INT, NULL);
 		vao->unbind();
 	}
 	
-	void drawInstanced(GLsizei primcount)
+	void drawInstanced(GLsizei primcount) const
 	{
 		vao->bind();
 		glDrawElementsInstanced(mode, indices.size(), GL_UNSIGNED_INT, NULL, primcount);
