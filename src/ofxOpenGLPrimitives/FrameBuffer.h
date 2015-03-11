@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ofxOpenGLPrimitivesTexture.h"
-#include "ofxOpenGLPrimitivesRenderBuffer.h"
+#include "ofxOpenGLPrimitives/Texture.h"
+#include "ofxOpenGLPrimitives/RenderBuffer.h"
 
 OFX_OPENGL_PRIMITIVES_BEGIN_NAMESPACE
 
@@ -14,18 +14,18 @@ public:
 	
 	FrameBuffer()
 	{
-		glGenFramebuffers(1, &object);
-		assert(object != 0);
+		glGenFramebuffers(1, &handle);
+		assert(handle != 0);
 	}
 	
 	~FrameBuffer()
 	{
-		glDeleteFramebuffers(1, &object);
+		glDeleteFramebuffers(1, &handle);
 	}
 	
 	void bind()
 	{
-		glBindFramebuffer(GL_FRAMEBUFFER, object);
+		glBindFramebuffer(GL_FRAMEBUFFER, handle);
 	}
 	
 	void unbind()
@@ -38,7 +38,7 @@ public:
 		glFramebufferTexture2D(GL_FRAMEBUFFER,
 							   attachment,
 							   tex->getTarget(),
-							   tex->getObject(),
+							   tex->getHandle(),
 							   0);
 		
 		checkStatus(glCheckFramebufferStatus(GL_FRAMEBUFFER));
@@ -50,7 +50,7 @@ public:
 		glFramebufferRenderbuffer(GL_FRAMEBUFFER,
 								  attachment,
 								  GL_RENDERBUFFER,
-								  rbo->getObject());
+								  rbo->getHandle());
 		
 		checkStatus(glCheckFramebufferStatus(GL_FRAMEBUFFER));
 		checkError();

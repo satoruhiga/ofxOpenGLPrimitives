@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxOpenGLPrimitivesObject.h"
+#include "ofxOpenGLPrimitives/Object.h"
 
 OFX_OPENGL_PRIMITIVES_BEGIN_NAMESPACE
 
@@ -22,18 +22,18 @@ public:
 	target(target),
 	parameter_target(parameter_target)
 	{
-		glGenTextures(1, &object);
-		assert(object != 0);
+		glGenTextures(1, &handle);
+		assert(handle != 0);
 	}
 	
 	virtual ~Texture()
 	{
-		glDeleteTextures(1, &object);
+		glDeleteTextures(1, &handle);
 	}
 	
 	void bind()
 	{
-		glBindTexture(parameter_target, object);
+		glBindTexture(parameter_target, handle);
 		checkError();
 	}
 	

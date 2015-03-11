@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 
-#include "ofxOpenGLPrimitivesConstants.h"
+#include "ofxOpenGLPrimitives/Constants.h"
 
 OFX_OPENGL_PRIMITIVES_BEGIN_NAMESPACE
 

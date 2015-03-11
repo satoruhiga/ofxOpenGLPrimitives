@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxOpenGLPrimitivesTexture.h"
+#include "ofxOpenGLPrimitives/Texture.h"
 
 OFX_OPENGL_PRIMITIVES_BEGIN_NAMESPACE
 
@@ -9,7 +9,7 @@ class CubeMapTexture : public Texture2D
 public:
 	OFX_OPENGL_PRIMITIVES_DEFINE_REFERENCE(CubeMapTexture);
 	
-	CubeMapTexture(GLuint object,
+	CubeMapTexture(GLuint handle,
 				   GLsizei width, GLsizei height,
 				   TextureTarget::Enum cubemap_target,
 				   TextureFormat::Enum format = TextureFormat::RGB,
@@ -23,7 +23,7 @@ public:
 			   cubemap_target,
 			   TextureParameterTarget::TEXTURE_CUBE_MAP)
 	{
-		this->object = object;
+		this->handle = handle;
 		
 		glTexImage2D(target,
 					 0, /* mip level */
@@ -56,8 +56,8 @@ public:
 			 TextureTarget::TEXTURE_CUBE_MAP_POSITIVE_X,
 			 TextureParameterTarget::TEXTURE_CUBE_MAP)
 	{
-		glGenTextures(1, &object);
-		assert(object != 0);
+		glGenTextures(1, &handle);
+		assert(handle != 0);
 		
 		bind();
 		{
@@ -70,7 +70,7 @@ public:
 			
 			for (int i = 0; i < 6; i++)
 			{
-				textures[i] = new CubeMapTexture(object,
+				textures[i] = new CubeMapTexture(handle,
 												 width, height,
 												 (TextureTarget::Enum)(TextureTarget::TEXTURE_CUBE_MAP_POSITIVE_X + i),
 												 format,

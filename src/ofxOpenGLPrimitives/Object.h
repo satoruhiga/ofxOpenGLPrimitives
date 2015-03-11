@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxOpenGLPrimitivesUtil.h"
+#include "ofxOpenGLPrimitives/Util.h"
 
 OFX_OPENGL_PRIMITIVES_BEGIN_NAMESPACE
 
@@ -10,13 +10,13 @@ class OpenGLObject
 {
 public:
 	
-	GLuint getObject() const { return object; }
+	GLuint getHandle() const { return handle; }
 	
 protected:
 	
-	GLuint object;
+	GLuint handle;
 	
-	OpenGLObject() : object(0) {}
+	OpenGLObject() : handle(0) {}
 	virtual ~OpenGLObject() {}
 	
 	virtual void bind() = 0;
@@ -28,38 +28,38 @@ private:
 	OpenGLObject& operator=(const OpenGLObject&) {}
 };
 
-#pragma mark - BufferObject
+#pragma mark - Buffer
 
-class BufferObject : public OpenGLObject
+class Buffer : public OpenGLObject
 {
 public:
 	
-	BufferObject(GLenum target, GLenum usage) : target(target), usage(usage)
+	Buffer(GLenum target) : target(target)
 	{
-		glGenBuffers(1, &object);
-		assert(object != 0);
+		glGenBuffers(1, &handle);
+		assert(handle != 0);
 	}
 	
-	~BufferObject()
+	~Buffer()
 	{
-		glDeleteBuffers(1, &object);
+		glDeleteBuffers(1, &handle);
 	}
 	
 	//
 	
 	void bind()
 	{
-		glBindBuffer(target, object);
+		glBindBuffer(target, handle);
 	}
 	
 	void unbind()
 	{
-		glBindBuffer(target, 0);
+		glBindBuffer(target, NULL);
 	}
 	
 	//
 	
-	inline void allocate(const GLvoid *data, GLsizeiptr num_bytes)
+	inline void allocate(const GLvoid *data, GLsizeiptr num_bytes, GLenum usage)
 	{
 		this->num_bytes = num_bytes;
 		
@@ -68,39 +68,34 @@ public:
 	}
 	
 	template <typename T>
-	inline void allocate(const vector<T>& data)
+	inline void allocate(const vector<T>& data, GLenum usage)
 	{
-		allocate(usage, data.data(), sizeof(T) * data.size());
+		allocate(usage, data.data(), sizeof(T) * data.size(), usage);
 	}
 	
-	inline void allocate(GLsizeiptr num_bytes)
+	inline void allocate(GLsizeiptr num_bytes, GLenum usage)
 	{
-		allocate(NULL, num_bytes);
+		allocate(NULL, num_bytes, usage);
 	}
 	
 	template <typename T>
-	inline void allocate(size_t size)
+	inline void allocate(size_t size, GLenum usage)
 	{
-		allocate(sizeof(T) * size);
+		allocate(sizeof(T) * size, usage);
 	}
 	
 	//
 	
-	void assign(const GLvoid *data, GLsizeiptr num_bytes, GLintptr offset = 0)
+	void setData(const GLvoid * data, GLsizei size, GLenum usage)
 	{
-		assert(this->num_bytes > 0);
-		assert(this->num_bytes >= num_bytes + offset);
-		
-		glBufferSubData(target, offset, num_bytes, data);
-		checkError();
+		glBufferData(target, size, data, usage);
 	}
-	
-	template <typename T>
-	void assign(const vector<T>& data)
+
+	void setSubData(const GLvoid * data, GLintptr offset, GLsizei size)
 	{
-		assign(data.data(), sizeof(T) * data.size());
+		glBufferSubData(target, offset, size, data);
 	}
-	
+
 	//
 	
 	void* map(GLenum access)
@@ -123,12 +118,12 @@ protected:
 
 #pragma mark - VertexBuffer
 
-class VertexBuffer : public BufferObject
+class VertexBuffer : public Buffer
 {
 public:
 	OFX_OPENGL_PRIMITIVES_DEFINE_REFERENCE(VertexBuffer);
 	
-	VertexBuffer(GLenum target, GLenum usage) : BufferObject(target, usage) {}
+	VertexBuffer(GLenum target) : Buffer(target) {}
 	
 	//
 	
@@ -195,13 +190,13 @@ private:
 
 #pragma mark - PixelBuffer
 
-class PixelBuffer : public BufferObject
+class PixelBuffer : public Buffer
 {
 public:
 	OFX_OPENGL_PRIMITIVES_DEFINE_REFERENCE(PixelBuffer);
 	
 	// TODO: constructor takes width and height param
-	PixelBuffer(GLenum target, GLenum usage) : BufferObject(target, usage) {}
+	PixelBuffer(GLenum target) : Buffer(target) {}
 	
 	void copy(int x, int y, int width, int height, GLenum format = GL_RGBA, GLenum type = GL_UNSIGNED_BYTE)
 	{

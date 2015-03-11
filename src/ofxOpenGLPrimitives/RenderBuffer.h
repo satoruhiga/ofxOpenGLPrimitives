@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxOpenGLPrimitivesObject.h"
+#include "ofxOpenGLPrimitives/Object.h"
 
 OFX_OPENGL_PRIMITIVES_BEGIN_NAMESPACE
 
@@ -13,8 +13,8 @@ public:
 	
 	RenderBuffer(GLsizei width, GLsizei height, GLenum internalformat) : HasSize2D(width, height)
 	{
-		glGenRenderbuffers(1, &object);
-		assert(object != 0);
+		glGenRenderbuffers(1, &handle);
+		assert(handle != 0);
 		
 		bind();
 		glRenderbufferStorage(GL_RENDERBUFFER, internalformat, width, height);
@@ -25,12 +25,12 @@ public:
 	
 	~RenderBuffer()
 	{
-		glDeleteRenderbuffers(1, &object);
+		glDeleteRenderbuffers(1, &handle);
 	}
 	
 	void bind()
 	{
-		glBindRenderbuffer(GL_RENDERBUFFER, object);
+		glBindRenderbuffer(GL_RENDERBUFFER, handle);
 	}
 	
 	void unbind()

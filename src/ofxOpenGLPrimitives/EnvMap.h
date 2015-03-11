@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ofxOpenGLPrimitivesCubeMap.h"
+#include "ofxOpenGLPrimitives/CubeMap.h"
 
 OFX_OPENGL_PRIMITIVES_BEGIN_NAMESPACE
 

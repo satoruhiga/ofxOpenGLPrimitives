@@ -1,4 +1,4 @@
-#include "ofxOpenGLPrimitivesUtil.h"
+#include "ofxOpenGLPrimitives/Util.h"
 
 OFX_OPENGL_PRIMITIVES_BEGIN_NAMESPACE
 
